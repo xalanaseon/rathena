@@ -14,25 +14,31 @@
 //============================================================
 
 -	script	Healer	-1,{
-	
-	percentheal 100,100;
-	skilleffect 33,0; sc_start SC_ANGELUS,1200000,10;
-	skilleffect 74,0; sc_start SC_MAGNIFICAT,1200000,5;
-	skilleffect 75,0; sc_start SC_GLORIA,1200000,5;
-	skilleffect 67,0; sc_start SC_SUFFRAGIUM,1200000,3;
-	skilleffect 34,0; sc_start SC_BLESSING,1200000,10;
-	skilleffect 29,0; sc_start SC_INCREASEAGI,1200000,10;
-	sc_start SC_STRFood,1200000,10;
-	sc_start SC_AGIFood,1200000,10;
-	sc_start SC_VITFood,1200000,10;
-	sc_start SC_INTFood,1200000,10;
-	sc_start SC_DEXFood,1200000,10;
-	sc_start SC_LUKFood,1200000,10;
-	sc_start SC_HitFood,1200000,30;
-	sc_start SC_FleeFood,1200000,30;
-	// sc_start SC_BATKFood,1200000,10;
-	// sc_start SC_MATKFood,1200000,10;
 
+	.@Price = 0;	// Zeny required for heal
+	.@Buffs = 0;	// Also buff players? (1: yes / 0: no)
+	.@Delay = 0;	// Heal delay, in seconds
+
+	if (@HD > gettimetick(2))
+		end;
+	if (.@Price) {
+		message strcharinfo(0), "Healing costs " + callfunc("F_InsertComma",.@Price) + " Zeny.";
+		if (Zeny < .@Price)
+			end;
+		if (select("^0055FFHeal^000000:^777777Cancel^000000") == 2)
+			end;
+		Zeny -= .@Price;
+	}
+	specialeffect2 EF_HEAL2;
+	percentheal 100,100;
+	if (.@Buffs) {
+		specialeffect2 EF_INCAGILITY;
+		sc_start SC_INCREASEAGI,240000,10;
+		specialeffect2 EF_BLESSING;
+		sc_start SC_BLESSING,240000,10;
+	}
+	if (.@Delay)
+		@HD = gettimetick(2) + .@Delay;
 	end;
 }
 

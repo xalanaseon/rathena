@@ -16473,7 +16473,7 @@ int skill_castfix_sc(struct block_list *bl, double time, uint8 flag)
 			if(!(flag&2))
 				time -= time * sc->data[SC_SUFFRAGIUM]->val2 / 100;
 			//Suffragium ends even if the skill is not affected by it
-			status_change_end(bl, SC_SUFFRAGIUM, INVALID_TIMER);
+			//status_change_end(bl, SC_SUFFRAGIUM, INVALID_TIMER);
 		}
 	}
 
@@ -16565,7 +16565,8 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 			VARCAST_REDUCTION(-sc->data[SC__LAZINESS]->val2);
 		if (sc->data[SC_SUFFRAGIUM]) {
 			VARCAST_REDUCTION(sc->data[SC_SUFFRAGIUM]->val2);
-			status_change_end(bl, SC_SUFFRAGIUM, INVALID_TIMER);
+			//SPWG-RO remove suffrgium limited use.
+			//status_change_end(bl, SC_SUFFRAGIUM, INVALID_TIMER);
 		}
 		if (sc->data[SC_MEMORIZE]) {
 			reduce_cast_rate += 50;
