@@ -5166,6 +5166,18 @@ struct Damage battle_calc_weapon_final_atk_modifiers(struct Damage wd, struct bl
 				if (enchant_dmg > 0)
 					ATK_ADD(wd.damage, wd.damage2, enchant_dmg);
 			}
+			if (sc->data[SC_WATERWEAPON] || sc->data[SC_EARTHWEAPON] 
+			|| sc->data[SC_FIREWEAPON] || sc->data[SC_WINDWEAPON]) {
+				//MATK - MDEF - MDEF2
+				int64 enchant_dmg = 0;
+				if (sstatus->matk_max > sstatus->matk_min)
+					enchant_dmg = enchant_dmg + sstatus->matk_min + rnd() % (sstatus->matk_max - sstatus->matk_min);
+				else
+					enchant_dmg = enchant_dmg + sstatus->matk_min;
+				enchant_dmg = enchant_dmg - (tstatus->mdef + tstatus->mdef2);
+				if (enchant_dmg > 0)
+					ATK_ADD(wd.damage, wd.damage2, enchant_dmg);
+			}
 		}
 		if (skill_id != SN_SHARPSHOOTING && skill_id != RA_ARROWSTORM)
 			status_change_end(src, SC_CAMOUFLAGE, INVALID_TIMER);
@@ -5887,7 +5899,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						skillratio += 10 * skill_lv;
 						break;
 					case AL_HOLYLIGHT:
-						skillratio += 25;
+						skillratio += 325;
 						if (sd && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_PRIEST)
 							skillratio *= 5; //Does 5x damage include bonuses from other skills?
 						break;
